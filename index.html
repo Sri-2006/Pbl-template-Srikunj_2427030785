@@ -81,9 +81,9 @@ Moreover, most classical planners assume static environments or neglect energy-a
         <section id="methodology" class="space-y-12">
             <h2 class="text-4xl font-black text-center uppercase tracking-tight">System <span class="text-blue-500">Methodology</span></h2>
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="glass p-8 rounded-3xl text-center">
+                <div class="glass p-8 rounded-3xl text-center hover:bg-white/5 transition-colors duration-300">
                     <i class="fas fa-database text-blue-500 text-3xl mb-4"></i>
-                    <h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Input</h3>
+                    <h3 class="font-bold mb-2 uppercase text-xs tracking-widest text-slate-200">Input</h3>
                     <p class="text-sm text-slate-500">Simulation Data
 Simulation + experimental WPT system data
 
@@ -92,9 +92,9 @@ Simulation + experimental WPT system data
 Preprocessed via filtering, normalization, and feature engineering
 </p>
                 </div>
-                <div class="glass p-8 rounded-3xl text-center">
+                <div class="glass p-8 rounded-3xl text-center hover:bg-white/5 transition-colors duration-300">
                     <i class="fas fa-microchip text-purple-500 text-3xl mb-4"></i>
-                    <h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Model / Architecture</h3>
+                    <h3 class="font-bold mb-2 uppercase text-xs tracking-widest text-slate-200">Model / Architecture</h3>
                     <p class="text-sm text-slate-500">Resonant inductive coupling WPT system
 
 FEM-based EM modeling
@@ -103,10 +103,10 @@ Closed-loop inverter control
 
 Optional ML-based efficiency prediction/optimization</p>
                 </div>
-                <div class="glass p-8 rounded-3xl text-center border-2 border-green-500/20 bg-green-500/5">
+                <div class="glass p-8 rounded-3xl text-center border-2 border-green-500/20 bg-green-500/5 hover:bg-green-500/10 transition-colors duration-300">
                     <i class="fab fa-python text-green-500 text-3xl mb-4"></i>
                     <h3 class="font-bold mb-4 uppercase text-xs tracking-widest text-green-400">Live Execution</h3>
-                    <a href="https://github.com/Sri-2006/Auv-Energy-based-efficiency-system.git" target="_blank" class="px-6 py-2 bg-green-600 rounded-full text-[10px] font-black hover:bg-green-500 transition shadow-lg shadow-green-900/40">VIEW CODE / DEMO</a>
+                    <a href="https://github.com/Sri-2006/Auv-Energy-based-efficiency-system.git" target="_blank" class="px-6 py-2 bg-green-600 rounded-full text-[10px] font-black hover:bg-green-500 transition shadow-lg shadow-green-900/40 inline-flex items-center gap-2"><i class="fab fa-github"></i>VIEW CODE / DEMO</a>
                 </div>
             </div>
         </section>
@@ -114,17 +114,21 @@ Optional ML-based efficiency prediction/optimization</p>
         <section id="results" class="glass p-12 rounded-[3.5rem] border-t-4 border-blue-500">
             <h2 class="text-3xl font-black mb-12 text-center uppercase tracking-tight">Results & <span class="text-blue-500">Analysis</span></h2>
             <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="h-80"><canvas id="resultsChart"></canvas></div>
+                <div class="h-80 w-full"><canvas id="resultsChart"></canvas></div>
                 <div class="space-y-6">
-                    <div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10 shadow-inner">
-                        <span class="text-slate-400 font-bold uppercase text-xs tracking-widest">Energy Saved:</span>
-                        <span class="text-blue-400 font-mono font-black text-3xl">78.71%</span>
+                    <div class="p-6 rounded-2xl bg-gradient-to-r from-blue-900/40 to-transparent flex justify-between items-center border border-blue-500/20 shadow-inner">
+                        <span class="text-slate-300 font-bold uppercase text-xs tracking-widest">Energy Saved:</span>
+                        <span class="text-emerald-400 font-mono font-black text-3xl drop-shadow-[0_0_10px_rgba(52,211,153,0.3)]">78.71%</span>
                     </div>
-                    <p class="text-slate-500 text-sm italic text-justify leading-relaxed">Shortest Path Energy: 18590.80 J
-</p>
-<p class="text-slate-500 text-sm italic text-justify leading-relaxed">Energy-Optimal Path Energy: 3957.68 J
-</p>
-
+                    <div class="h-40 w-full border border-white/5 rounded-2xl bg-black/20 p-4"><canvas id="efficiencyChart"></canvas></div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-route text-red-400"></i>
+                        <p class="text-slate-400 text-sm italic w-full flex justify-between">Shortest Path Energy: <span class="font-mono font-bold text-slate-300">18,590.80 J</span></p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-water text-blue-400"></i>
+                        <p class="text-slate-400 text-sm italic w-full flex justify-between">Energy-Optimal Path: <span class="font-mono font-bold text-slate-300">3,957.68 J</span></p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -198,17 +202,28 @@ Optional ML-based efficiency prediction/optimization</p>
             }, 1000);
         }
 
-        // RESULTS CHART (Demo Data)
+        // RESULTS CHART (Real Data)
         const ctx = document.getElementById('resultsChart').getContext('2d');
+        const redGradient = ctx.createLinearGradient(0, 0, 0, 300);
+        redGradient.addColorStop(0, 'rgba(239, 68, 68, 0.8)');
+        redGradient.addColorStop(1, 'rgba(239, 68, 68, 0.1)');
+        
+        const blueGradient = ctx.createLinearGradient(0, 0, 0, 300);
+        blueGradient.addColorStop(0, 'rgba(56, 189, 248, 0.8)');
+        blueGradient.addColorStop(1, 'rgba(56, 189, 248, 0.1)');
+
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Existing System', 'Our Solution'],
+                labels: ['Shortest Path', 'Optimal Path'],
                 datasets: [{
-                    data: [70, 92],
-                    backgroundColor: ['#1e293b', '#3b82f6'],
-                    borderRadius: 15,
-                    barThickness: 50
+                    label: 'Energy (J)',
+                    data: [18590.80, 3957.68],
+                    backgroundColor: [redGradient, blueGradient],
+                    borderColor: ['#ef4444', '#38bdf8'],
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    barThickness: 45
                 }]
             },
             options: {
@@ -216,8 +231,34 @@ Optional ML-based efficiency prediction/optimization</p>
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: { 
-                    y: { beginAtZero: true, grid: { color: '#ffffff05' }, ticks: { color: '#475569' } },
-                    x: { grid: { display: false }, ticks: { color: '#475569' } }
+                    y: { beginAtZero: true, grid: { color: '#ffffff0d' }, ticks: { color: '#64748b' } },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+
+        // EFFICIENCY CHART
+        const ctxDoughnut = document.getElementById('efficiencyChart').getContext('2d');
+        new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Energy Saved', 'Energy Consumed'],
+                datasets: [{
+                    data: [78.71, 21.29],
+                    backgroundColor: ['rgba(16, 185, 129, 0.8)', 'rgba(30, 41, 59, 0.5)'],
+                    borderColor: ['#10b981', '#1e293b'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#94a3b8', font: { size: 11, family: "'Plus Jakarta Sans', sans-serif" } }
+                    }
                 }
             }
         });
